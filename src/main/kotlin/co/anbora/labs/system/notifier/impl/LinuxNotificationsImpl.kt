@@ -8,7 +8,6 @@ import com.intellij.ui.findAppIcon
 import com.sun.jna.Library
 import com.sun.jna.Native
 import com.sun.jna.Pointer
-import com.sun.jna.Structure
 import com.sun.jna.ptr.PointerByReference
 
 
@@ -31,12 +30,6 @@ object LinuxNotificationsImpl: SystemNotifier {
         fun g_error_free(error: Pointer?)
     }
 
-    @Structure.FieldOrder("domain", "code", "message")
-    private class GError(ptr: Pointer? = null) : Structure(ptr) {
-        @JvmField var domain: Int = 0 // guint
-        @JvmField var code: Int = 0   // gint
-        @JvmField var message: Pointer? = null // gchar*
-    }
 
     init {
         myLibNotify = Native.load("libnotify.so.4", LibNotify::class.java)
@@ -74,9 +67,8 @@ object LinuxNotificationsImpl: SystemNotifier {
                     val errPtr = errorRef.value
                     val message = try {
                         if (errPtr != null) {
-                            val gerr = GError(errPtr)
-                            gerr.read()
-                            gerr.message?.getString(0)
+                            // GError layout: guint domain (4), gint code (4), gchar* message (pointer) -> message at offset 8
+                            errPtr.getPointer(8L)?.getString(0)
                         } else null
                     } catch (_: Throwable) { null }
 
