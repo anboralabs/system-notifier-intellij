@@ -1,0 +1,27 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>co.anbora.labs.system.notifier</id>
+    <name>System Notifier</name>
+    <vendor email="support@anbora.co" url="https://labs.anbora.co">Anbora-labs</vendor>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.LicenseStartup"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="co.anbora.labs.system.notifier">
+        <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.LinuxNotificationCenterNotifier"/>
+        <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.MacCenterMessageNotifier"/>
+        <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.WindowActionCenterNotifier"/>
+    </extensions>
+
+    <extensionPoints>
+        <extensionPoint interface="co.anbora.labs.system.notifier.SystemNotifierFlavor"
+                        dynamic="true" name="systemNotifier"/>
+    </extensionPoints>
+</idea-plugin>
