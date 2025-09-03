@@ -8,11 +8,14 @@ import com.intellij.ui.findAppIcon
 import com.sun.jna.Library
 import com.sun.jna.Native
 import com.sun.jna.Pointer
+import com.sun.jna.Structure
+import com.sun.jna.ptr.PointerByReference
 
 
 object LinuxNotificationsImpl: SystemNotifier {
 
     private var myLibNotify: LibNotify? = null
+    private var myGlib: GLib? = null
     private var myIcon: String? = null
     private val myLock = Any()
     private var myDisposed = false
@@ -21,11 +24,27 @@ object LinuxNotificationsImpl: SystemNotifier {
         fun notify_init(appName: String?): Int
         fun notify_uninit()
         fun notify_notification_new(summary: String?, body: String?, icon: String?): Pointer?
-        fun notify_notification_show(notification: Pointer?, error: Pointer?): Int
+        fun notify_notification_show(notification: Pointer?, error: PointerByReference?): Int
+    }
+
+    private interface GLib : Library {
+        fun g_error_free(error: Pointer?)
+    }
+
+    @Structure.FieldOrder("domain", "code", "message")
+    private class GError(ptr: Pointer? = null) : Structure(ptr) {
+        @JvmField var domain: Int = 0 // guint
+        @JvmField var code: Int = 0   // gint
+        @JvmField var message: Pointer? = null // gchar*
     }
 
     init {
         myLibNotify = Native.load("libnotify.so.4", LibNotify::class.java)
+        try {
+            myGlib = Native.load("libglib-2.0.so.0", GLib::class.java)
+        } catch (_: Throwable) {
+            // Best effort: if GLib binding fails, we can still deliver notifications without detailed error text.
+        }
 
         val appName = ApplicationNamesInfo.getInstance().productName
         check(myLibNotify!!.notify_init(appName) != 0) { "notify_init failed" }
@@ -48,7 +67,29 @@ object LinuxNotificationsImpl: SystemNotifier {
         ApplicationManager.getApplication().executeOnPooledThread {
             synchronized(myLock) {
                 val notification = myLibNotify?.notify_notification_new(title, description, myIcon)
-                myLibNotify?.notify_notification_show(notification, null)
+
+                val errorRef = PointerByReference()
+                val result = myLibNotify?.notify_notification_show(notification, errorRef) ?: 0
+                if (result == 0) {
+                    val errPtr = errorRef.value
+                    val message = try {
+                        if (errPtr != null) {
+                            val gerr = GError(errPtr)
+                            gerr.read()
+                            gerr.message?.getString(0)
+                        } else null
+                    } catch (_: Throwable) { null }
+
+                    System.err.println("[LinuxNotificationsImpl] notify_notification_show failed" + (message?.let { ": $it" } ?: ""))
+
+                    try {
+                        if (errPtr != null) myGlib?.g_error_free(errPtr)
+                    } catch (_: Throwable) {
+                        // ignore
+                    }
+                } else {
+                    println("[LinuxNotificationsImpl] notify_notification_show OK (result=$result)")
+                }
             }
         }
     }

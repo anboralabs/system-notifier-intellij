@@ -39,9 +39,7 @@ class LicenseStartup: ProjectActivity {
             "setSoundName:",
             *arrayOf<Any>(Foundation.nsString("NSUserNotificationDefaultSoundName"))
         )
-
-        Foundation.allocateObjcClassPair()
-
+        
         val center = Foundation.invoke(
             Foundation.getObjcClass("NSUserNotificationCenter"),
             "defaultUserNotificationCenter",
