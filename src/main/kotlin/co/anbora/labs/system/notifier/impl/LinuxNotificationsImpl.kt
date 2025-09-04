@@ -17,9 +17,13 @@ object LinuxNotificationsImpl: SystemNotifier {
     private var myDisposed = false
 
     private interface LibNotify : Library {
+        @Suppress("FunctionName")
         fun notify_init(appName: String?): Int
+        @Suppress("FunctionName", "SpellCheckingInspection")
         fun notify_uninit()
+        @Suppress("FunctionName")
         fun notify_notification_new(summary: String?, body: String?, icon: String?): Pointer?
+        @Suppress("FunctionName")
         fun notify_notification_show(notification: Pointer?, error: Pointer?): Int
     }
 

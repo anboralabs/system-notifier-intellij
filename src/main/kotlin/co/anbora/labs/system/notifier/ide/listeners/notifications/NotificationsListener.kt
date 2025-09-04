@@ -1,5 +1,6 @@
-package co.anbora.labs.system.notifier.ide.listeners
+package co.anbora.labs.system.notifier.ide.listeners.notifications
 
+import co.anbora.labs.system.notifier.NOTIFICATIONS_GROUP_ID
 import co.anbora.labs.system.notifier.SystemNotifierFlavor
 import com.intellij.notification.Notification
 import com.intellij.notification.Notifications
@@ -7,7 +8,7 @@ import com.intellij.notification.Notifications
 class NotificationsListener: Notifications {
 
     override fun notify(notification: Notification) {
-        if (notification.groupId == "5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier")
+        if (NOTIFICATIONS_GROUP_ID == notification.groupId)
             return
 
         SystemNotifierFlavor.getApplicableNotifiers().forEach {

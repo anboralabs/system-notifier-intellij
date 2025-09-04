@@ -1,4 +1,4 @@
-package co.anbora.labs.system.notifier.ide.listeners
+package co.anbora.labs.system.notifier.ide.listeners.externalSystem
 
 import co.anbora.labs.system.notifier.SystemNotifierFlavor
 import com.intellij.openapi.externalSystem.model.task.ExternalSystemTaskId

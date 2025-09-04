@@ -7,18 +7,20 @@
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <resource-bundle>messages.systemNotifier</resource-bundle>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.LicenseStartup"/>
-        <externalSystemTaskNotificationListener implementation="co.anbora.labs.system.notifier.ide.listeners.ExternalSystemFinishedListener"/>
+        <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.RunConfigurationStartup"/>
+        <externalSystemTaskNotificationListener implementation="co.anbora.labs.system.notifier.ide.listeners.externalSystem.ExternalSystemFinishedListener"/>
         <!-- Notification group used by fallback IDE notifications -->
-        <notificationGroup id="5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier" displayType="BALLOON" isLogByDefault="true"/>
+        <notificationGroup key="co.anbora.labs.system.notifier.notification.key" id="5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier" displayType="BALLOON" isLogByDefault="true"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="co.anbora.labs.system.notifier.ide.listeners.NotificationsListener"
+        <listener class="co.anbora.labs.system.notifier.ide.listeners.notifications.NotificationsListener"
                   topic="com.intellij.notification.Notifications"/>
     </applicationListeners>
 
