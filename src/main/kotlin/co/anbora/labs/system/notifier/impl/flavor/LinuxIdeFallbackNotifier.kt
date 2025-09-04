@@ -1,6 +1,7 @@
 package co.anbora.labs.system.notifier.impl.flavor
 
 import co.anbora.labs.system.notifier.SystemNotifierFlavor
+import co.anbora.labs.system.notifier.impl.FallbackNotificationsImpl
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.project.Project
@@ -13,11 +14,7 @@ import com.intellij.openapi.util.SystemInfo
 class LinuxIdeFallbackNotifier : SystemNotifierFlavor() {
 
     override fun notify(name: String, title: String, description: String) {
-        // No Project context available in the interface, so we pass null.
-        val group = NotificationGroupManager.getInstance()
-            .getNotificationGroup("IntelliJ JNA Notifier")
-        group.createNotification(title, description, NotificationType.INFORMATION)
-            .notify(null as Project?)
+        FallbackNotificationsImpl.notify(name, title, description)
     }
 
     override fun isApplicable(): Boolean = SystemInfo.isLinux && !hasDbusSession()

@@ -48,7 +48,10 @@ object LinuxNotificationsImpl: SystemNotifier {
         ApplicationManager.getApplication().executeOnPooledThread {
             synchronized(myLock) {
                 val notification = myLibNotify?.notify_notification_new(title, description, myIcon)
-                myLibNotify?.notify_notification_show(notification, null)
+                val result = myLibNotify?.notify_notification_show(notification, null)
+                if (result != 0) {
+
+                }
             }
         }
     }

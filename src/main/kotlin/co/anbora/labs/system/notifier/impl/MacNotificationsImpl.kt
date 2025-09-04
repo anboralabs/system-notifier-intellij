@@ -1,14 +1,29 @@
 package co.anbora.labs.system.notifier.impl
 
 import co.anbora.labs.system.notifier.SystemNotifier
+import com.intellij.ide.AppLifecycleListener
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.ui.mac.foundation.Foundation
-import java.util.UUID
+import java.awt.Toolkit
+import java.util.*
 
 object MacNotificationsImpl: SystemNotifier {
 
     init {
+        val connection = ApplicationManager.getApplication().messageBus.connect()
+        connection.subscribe(AppLifecycleListener.TOPIC, object : AppLifecycleListener {
+            override fun appClosing() {
+                cleanupDeliveredNotifications()
+            }
+        })
+
         ObjectiveCRuntime.ensureUserNotificationCenterDelegateInstalled()
+    }
+
+    private fun cleanupDeliveredNotifications() {
+        val center = Foundation.invoke(Foundation.getObjcClass("NSUserNotificationCenter"), "defaultUserNotificationCenter")
+        Foundation.invoke(center, "removeAllDeliveredNotifications")
     }
 
     override fun notify(name: String, title: String, description: String) {
@@ -29,15 +44,17 @@ object MacNotificationsImpl: SystemNotifier {
             "setIdentifier:",
             *arrayOf<Any>(Foundation.nsString(UUID.randomUUID().toString()))
         )
-        Foundation.invoke(
+        /*Foundation.invoke(
             notification,
             "setSoundName:",
             *arrayOf<Any>(Foundation.nsString("Glass"))
-        )
+        )*/
         val center = Foundation.invoke(
             Foundation.getObjcClass("NSUserNotificationCenter"),
             "defaultUserNotificationCenter"
         )
         Foundation.invoke(center, "deliverNotification:", notification)
+
+        Toolkit.getDefaultToolkit().beep()
     }
 }

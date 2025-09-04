@@ -12,9 +12,15 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.LicenseStartup"/>
+        <externalSystemTaskNotificationListener implementation="co.anbora.labs.system.notifier.ide.listeners.ExternalSystemFinishedListener"/>
         <!-- Notification group used by fallback IDE notifications -->
-        <notificationGroup id="IntelliJ JNA Notifier" displayType="BALLOON" isLogByDefault="true"/>
+        <notificationGroup id="5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier" displayType="BALLOON" isLogByDefault="true"/>
     </extensions>
+
+    <applicationListeners>
+        <listener class="co.anbora.labs.system.notifier.ide.listeners.NotificationsListener"
+                  topic="com.intellij.notification.Notifications"/>
+    </applicationListeners>
 
     <extensions defaultExtensionNs="co.anbora.labs.system.notifier">
         <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.LinuxNotificationCenterNotifier"/>
