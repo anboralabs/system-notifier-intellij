@@ -1,8 +1,10 @@
 package co.anbora.labs.system.notifier.impl
 
 import co.anbora.labs.system.notifier.SystemNotifier
+import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
+import java.awt.Toolkit
 
 object FallbackNotificationsImpl: SystemNotifier {
     override fun notify(name: String, title: String, description: String) {
@@ -11,5 +13,8 @@ object FallbackNotificationsImpl: SystemNotifier {
             .getNotificationGroup("5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier")
         group.createNotification(title, description, NotificationType.INFORMATION)
             .notify(null)
+        if (notifierSettings.addSoundToSystemNotifications()) {
+            Toolkit.getDefaultToolkit().beep()
+        }
     }
 }

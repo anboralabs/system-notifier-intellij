@@ -1,11 +1,11 @@
 package co.anbora.labs.system.notifier.impl
 
 import co.anbora.labs.system.notifier.SystemNotifier
+import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.ide.AppLifecycleListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.ui.mac.foundation.Foundation
-import java.awt.Toolkit
 import java.util.*
 
 object MacNotificationsImpl: SystemNotifier {
@@ -44,17 +44,17 @@ object MacNotificationsImpl: SystemNotifier {
             "setIdentifier:",
             *arrayOf<Any>(Foundation.nsString(UUID.randomUUID().toString()))
         )
-        /*Foundation.invoke(
-            notification,
-            "setSoundName:",
-            *arrayOf<Any>(Foundation.nsString("Glass"))
-        )*/
+        if (notifierSettings.addSoundToSystemNotifications()) {
+            Foundation.invoke(
+                notification,
+                "setSoundName:",
+                *arrayOf<Any>(Foundation.nsString("Glass"))
+            )
+        }
         val center = Foundation.invoke(
             Foundation.getObjcClass("NSUserNotificationCenter"),
             "defaultUserNotificationCenter"
         )
         Foundation.invoke(center, "deliverNotification:", notification)
-
-        Toolkit.getDefaultToolkit().beep()
     }
 }

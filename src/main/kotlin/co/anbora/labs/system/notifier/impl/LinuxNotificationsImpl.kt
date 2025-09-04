@@ -1,6 +1,7 @@
 package co.anbora.labs.system.notifier.impl
 
 import co.anbora.labs.system.notifier.SystemNotifier
+import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.ide.AppLifecycleListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
@@ -8,6 +9,7 @@ import com.intellij.ui.findAppIcon
 import com.sun.jna.Library
 import com.sun.jna.Native
 import com.sun.jna.Pointer
+import java.awt.Toolkit
 
 object LinuxNotificationsImpl: SystemNotifier {
 
@@ -53,8 +55,8 @@ object LinuxNotificationsImpl: SystemNotifier {
             synchronized(myLock) {
                 val notification = myLibNotify?.notify_notification_new(title, description, myIcon)
                 val result = myLibNotify?.notify_notification_show(notification, null)
-                if (result != 0) {
-
+                if (notifierSettings.addSoundToSystemNotifications()) {
+                    Toolkit.getDefaultToolkit().beep()
                 }
             }
         }

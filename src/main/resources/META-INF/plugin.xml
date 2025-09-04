@@ -15,6 +15,15 @@
         <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.LicenseStartup"/>
         <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.RunConfigurationStartup"/>
         <externalSystemTaskNotificationListener implementation="co.anbora.labs.system.notifier.ide.listeners.externalSystem.ExternalSystemFinishedListener"/>
+
+        <projectConfigurable
+                groupId="tools"
+                key="co.anbora.labs.system.notifier.notification.settings"
+                id="co.anbora.labs.system.notifier.ide.settings.NotificationsConfigurable"
+                instance="co.anbora.labs.system.notifier.ide.settings.NotificationsConfigurable" />
+
+        <applicationService serviceImplementation="co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService"/>
+
         <!-- Notification group used by fallback IDE notifications -->
         <notificationGroup key="co.anbora.labs.system.notifier.notification.key" id="5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier" displayType="BALLOON" isLogByDefault="true"/>
     </extensions>

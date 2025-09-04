@@ -14,6 +14,30 @@ import com.intellij.util.xmlb.annotations.Attribute
 class NotifierSettingsService: PersistentStateComponent<NotifierSettingsService.ToolchainState?> {
     private var state = ToolchainState()
 
+    fun addRunConfigurationsSystemNotifications(): Boolean = state.addRunConfigurationsSystemNotifications
+
+    fun addSoundToSystemNotifications(): Boolean = state.addSoundToSystemNotifications
+
+    fun showExternalSystemAsSystemNotifications(): Boolean = state.showExternalSystemAsSystemNotifications
+
+    fun showAllIDENotificationsAsSystemNotification(): Boolean = state.showAllIDENotificationsAsSystemNotification
+
+    fun setAddRunConfigurationsSystemNotifications(value: Boolean) {
+        state.addRunConfigurationsSystemNotifications = value
+    }
+
+    fun setAddSoundToSystemNotifications(value: Boolean) {
+        state.addSoundToSystemNotifications = value
+    }
+
+    fun setShowExternalSystemAsSystemNotifications(value: Boolean) {
+        state.showExternalSystemAsSystemNotifications = value
+    }
+
+    fun setShowAllIDENotificationsAsSystemNotification(value: Boolean) {
+        state.showAllIDENotificationsAsSystemNotification = value
+    }
+
     override fun getState() = state
 
     override fun loadState(state: ToolchainState) {
@@ -35,7 +59,7 @@ class NotifierSettingsService: PersistentStateComponent<NotifierSettingsService.
     }
 
     companion object {
-        val toolchainSettings
+        val notifierSettings
             get() = service<NotifierSettingsService>()
     }
 }

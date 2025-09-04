@@ -1,6 +1,7 @@
 package co.anbora.labs.system.notifier.impl
 
 import co.anbora.labs.system.notifier.SystemNotifier
+import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.openapi.wm.IdeFocusManager
 import com.intellij.ui.loadSmallApplicationIcon
 import com.intellij.ui.scale.ScaleContext
@@ -9,6 +10,7 @@ import com.intellij.util.ui.ImageUtil
 import com.intellij.util.ui.UIUtil
 import java.awt.Image
 import java.awt.SystemTray
+import java.awt.Toolkit
 import java.awt.TrayIcon
 import java.awt.Window
 import java.awt.event.ActionEvent
@@ -40,5 +42,8 @@ object WindowNotificationsImpl: SystemNotifier {
 
     override fun notify(name: String, title: String, description: String) {
         myTrayIcon.displayMessage(title, description, myType)
+        if (notifierSettings.addSoundToSystemNotifications()) {
+            Toolkit.getDefaultToolkit().beep()
+        }
     }
 }

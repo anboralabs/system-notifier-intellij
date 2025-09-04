@@ -1,6 +1,7 @@
 package co.anbora.labs.system.notifier.ide.listeners.externalSystem
 
-import co.anbora.labs.system.notifier.SystemNotifierFlavor
+import co.anbora.labs.system.notifier.ide.listeners.ListenersManager
+import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.openapi.externalSystem.model.task.ExternalSystemTaskId
 import com.intellij.openapi.externalSystem.model.task.ExternalSystemTaskNotificationListener
 
@@ -10,8 +11,9 @@ class ExternalSystemFinishedListener: ExternalSystemTaskNotificationListener {
         projectPath: String,
         id: ExternalSystemTaskId
     ) {
-        SystemNotifierFlavor.getApplicableNotifiers().forEach {
-            it.notify("System Notifier Plugin", "System Notifier Plugin", "Task finished: $projectPath")
+        if (!notifierSettings.showExternalSystemAsSystemNotifications()) {
+            return
         }
+        ListenersManager.notify("System Notifier Plugin", "System Notifier Plugin", "Task finished: $projectPath")
     }
 }
