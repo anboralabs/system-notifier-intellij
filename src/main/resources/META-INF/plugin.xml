@@ -28,6 +28,8 @@
 
         <!-- Notification group used by fallback IDE notifications -->
         <notificationGroup key="co.anbora.labs.system.notifier.notification.key" id="5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier" displayType="BALLOON" isLogByDefault="true"/>
+
+        <errorHandler implementation="co.anbora.labs.system.notifier.ide.errorHandler.SentryErrorHandler"/>
     </extensions>
 
     <applicationListeners>

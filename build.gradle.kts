@@ -16,6 +16,19 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.2.0"
     id("org.jetbrains.intellij.platform") version "2.7.2"
+    id("io.sentry.jvm.gradle") version "5.9.0"
+}
+
+sentry {
+    // Generates a JVM (Java, Kotlin, etc.) source bundle and uploads your source code to Sentry.
+    // This enables source context, allowing you to see your source
+    // code as part of your stack traces in Sentry.
+    includeSourceContext = true
+    autoUploadProguardMapping = true
+
+    org = "anbora-labs"
+    projectName = "system-notifier"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 
 group = properties("pluginGroup").get()
