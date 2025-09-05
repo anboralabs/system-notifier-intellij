@@ -18,6 +18,8 @@ class NotifierSettingsService: PersistentStateComponent<NotifierSettingsService.
 
     fun addSoundToSystemNotifications(): Boolean = state.addSoundToSystemNotifications
 
+    fun addSoundMacToSystemNotifications(): Boolean = state.addSoundMacToSystemNotifications
+
     fun showExternalSystemAsSystemNotifications(): Boolean = state.showExternalSystemAsSystemNotifications
 
     fun showAllIDENotificationsAsSystemNotification(): Boolean = state.showAllIDENotificationsAsSystemNotification
@@ -28,6 +30,10 @@ class NotifierSettingsService: PersistentStateComponent<NotifierSettingsService.
 
     fun setAddSoundToSystemNotifications(value: Boolean) {
         state.addSoundToSystemNotifications = value
+    }
+
+    fun setAddSoundMacToSystemNotifications(value: Boolean) {
+        state.addSoundMacToSystemNotifications = value
     }
 
     fun setShowExternalSystemAsSystemNotifications(value: Boolean) {
@@ -50,6 +56,9 @@ class NotifierSettingsService: PersistentStateComponent<NotifierSettingsService.
 
         @Attribute("addSoundToSystemNotifications")
         var addSoundToSystemNotifications: Boolean = true
+
+        @Attribute("addSoundMacToSystemNotifications")
+        var addSoundMacToSystemNotifications: Boolean = false
 
         @Attribute("showExternalSystemAsSystemNotifications")
         var showExternalSystemAsSystemNotifications: Boolean = true

@@ -39,6 +39,7 @@ object SystemNotifications {
         }
     }
 
+    @JvmStatic
     fun fallbackNotifications(title: String, content: String, project: Project?) {
         val notification = createNotification(title, content, NotificationType.INFORMATION)
         showNotification(notification, project)

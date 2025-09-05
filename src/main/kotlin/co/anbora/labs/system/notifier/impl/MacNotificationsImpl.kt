@@ -6,6 +6,7 @@ import com.intellij.ide.AppLifecycleListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.ui.mac.foundation.Foundation
+import java.awt.Toolkit
 import java.util.*
 
 object MacNotificationsImpl: SystemNotifier {
@@ -45,6 +46,9 @@ object MacNotificationsImpl: SystemNotifier {
             *arrayOf<Any>(Foundation.nsString(UUID.randomUUID().toString()))
         )
         if (notifierSettings.addSoundToSystemNotifications()) {
+            Toolkit.getDefaultToolkit().beep()
+        }
+        if (notifierSettings.addSoundMacToSystemNotifications()) {
             Foundation.invoke(
                 notification,
                 "setSoundName:",
