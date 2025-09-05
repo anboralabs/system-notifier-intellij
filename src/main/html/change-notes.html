@@ -1,64 +1,18 @@
 Versions:
 <ul>
-    <li>All Intellij products support: 1.1.2</li>
+    <li>All IntelliJ products support: 1.0.0</li>
 </ul>
 <br>
-Plugin updates:
+Release notes:
 <ul>
-    <li><b>1.1.2</b> <em>(2025-08-29)</em> - Add comprehensive inspections and quick fixes
+    <li><b>1.0.0</b> <em>(2025-07-31)</em> — initial release
         <ul>
-            <li>Add 11 new inspections for serverless.yml validation</li>
-            <li>Add YAML Find Usages support for serverless files</li>
-            <li>Add Quick Fixes for missing required fields</li>
-            <li><b>Critical Inspections (Phase 1):</b></li>
-            <li>• Missing Handler - Detects missing or invalid handler references</li>
-            <li>• Invalid Handler Format - Validates handler format per runtime</li>
-            <li>• Invalid Runtime - Detects completely invalid AWS Lambda runtimes</li>
-            <li>• Missing Service Name - Ensures required service field exists</li>
-            <li>• Missing Provider - Ensures required provider configuration exists</li>
-            <li><b>Important Inspections (Phase 2):</b></li>
-            <li>• Invalid Memory Size - Validates Lambda memory configuration (128-10240 MB)</li>
-            <li>• Invalid Timeout - Validates Lambda timeout (1-900 seconds)</li>
-            <li>• Hardcoded Secrets - Detects potential secrets in environment variables</li>
-            <li>• Invalid HTTP Method - Validates API Gateway HTTP methods</li>
-            <li>• Duplicate Environment Variables - Detects duplicate env vars</li>
-            <li>• Conflicting Event Paths - Detects conflicting HTTP routes</li>
-            <li>• Deprecated Runtime - Warns about deprecated AWS Lambda runtimes (WARNING level)</li>
-            <li><b>Quick Fixes:</b></li>
-            <li>• Add missing service name with default value</li>
-            <li>• Add complete provider configuration with AWS defaults</li>
-            <li>• Add missing provider fields (name: aws, runtime options)</li>
-            <li>• Multiple runtime options (Node.js, Python, Java) for missing runtime</li>
-            <li>Improve resolving PHP handler references</li>
-            <li>Improve resolving Kotlin handler references</li>
-            <li>Add a marker line for a handler key</li>
-        </ul>
-    </li>
-    <li><b>1.1.1</b> <em>(2025-08-27)</em> - Improve handler resolvers performance
-        <ul>
-            <li>Improve resolving JavaScript and TypeScript handler references</li>
-        </ul>
-    </li>
-    <li><b>1.1.0</b> <em>(2025-08-26)</em> - Add findUsages
-        <ul>
-            <li>Better implementation for resolving JavaScript and TypeScript handler references</li>
-        </ul>
-    </li>
-    <li><b>1.0.3</b> <em>(2025-08-24)</em> - Add sign validation </li>
-    <li><b>1.0.2</b> <em>(2025-08-04)</em> - Fix multiline highlighting </li>
-    <li><b>1.0.1</b> <em>(2025-08-03)</em> - Add handler resolvers and highlighting
-        <ul>
-            <li>Add code completion for self-references</li>
-        </ul>
-    </li>
-    <li><b>1.0.0</b> <em>(2025-07-31)</em> - initial release
-        <ul>
-            <li>Initial Release</li>
-            <li>Support for Serverless.yml</li>
-            <li>AWS Provider Code completion</li>
-            <li>ctrl + click - Go to navigation</li>
-            <li>ctrl + click - Find usages</li>
-            <li>Structure view</li>
+            <li>System notifications for Gradle and Maven tasks when they finish.</li>
+            <li>Notifications when executions (Run/Debug) start and finish.</li>
+            <li>Option to mirror all IDE notifications as system notifications.</li>
+            <li>Option to play a sound with notifications.</li>
+            <li>Compatibility: Windows (Action Center), macOS (Notification Center), Linux (libnotify) with an in-IDE fallback if there is no D-Bus session.</li>
+            <li>Settings panel under Settings/Preferences → Tools → System Notifier.</li>
         </ul>
     </li>
 </ul>

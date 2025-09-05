@@ -1,6 +1,7 @@
 package co.anbora.labs.system.notifier.impl
 
 import co.anbora.labs.system.notifier.SystemNotifier
+import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.ide.AppLifecycleListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
@@ -8,7 +9,7 @@ import com.intellij.ui.findAppIcon
 import com.sun.jna.Library
 import com.sun.jna.Native
 import com.sun.jna.Pointer
-
+import java.awt.Toolkit
 
 object LinuxNotificationsImpl: SystemNotifier {
 
@@ -18,17 +19,22 @@ object LinuxNotificationsImpl: SystemNotifier {
     private var myDisposed = false
 
     private interface LibNotify : Library {
+        @Suppress("FunctionName")
         fun notify_init(appName: String?): Int
+        @Suppress("FunctionName", "SpellCheckingInspection")
         fun notify_uninit()
+        @Suppress("FunctionName")
         fun notify_notification_new(summary: String?, body: String?, icon: String?): Pointer?
+        @Suppress("FunctionName")
         fun notify_notification_show(notification: Pointer?, error: Pointer?): Int
     }
+
 
     init {
         myLibNotify = Native.load("libnotify.so.4", LibNotify::class.java)
 
         val appName = ApplicationNamesInfo.getInstance().productName
-        check(myLibNotify!!.notify_init(appName) != 0) { "notify_init failed" }
+        check(myLibNotify?.notify_init(appName) != 0) { "notify_init failed" }
 
         val icon: String? = findAppIcon()
         myIcon = icon ?: "dialog-information"
@@ -38,7 +44,7 @@ object LinuxNotificationsImpl: SystemNotifier {
             override fun appClosing() {
                 synchronized(myLock) {
                     myDisposed = true
-                    myLibNotify!!.notify_uninit()
+                    myLibNotify?.notify_uninit()
                 }
             }
         })
@@ -48,7 +54,10 @@ object LinuxNotificationsImpl: SystemNotifier {
         ApplicationManager.getApplication().executeOnPooledThread {
             synchronized(myLock) {
                 val notification = myLibNotify?.notify_notification_new(title, description, myIcon)
-                myLibNotify?.notify_notification_show(notification, null)
+                val result = myLibNotify?.notify_notification_show(notification, null)
+                if (notifierSettings.addSoundToSystemNotifications()) {
+                    Toolkit.getDefaultToolkit().beep()
+                }
             }
         }
     }

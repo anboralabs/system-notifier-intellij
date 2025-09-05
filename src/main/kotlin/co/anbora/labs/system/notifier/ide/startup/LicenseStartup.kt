@@ -1,54 +1,26 @@
 package co.anbora.labs.system.notifier.ide.startup
 
-import co.anbora.labs.system.notifier.ide.IntelliJJNANotificationManager
+import co.anbora.labs.system.notifier.license.CheckLicense
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
-import com.intellij.openapi.util.text.StringUtil
-import com.intellij.ui.SystemNotifications
-import com.intellij.ui.mac.foundation.Foundation
-import java.util.UUID
+import com.intellij.util.concurrency.AppExecutorUtil
+import java.util.concurrent.TimeUnit
 
 class LicenseStartup: ProjectActivity {
     override suspend fun execute(project: Project) {
-        val notifications = SystemNotifications.getInstance()
-
-        val title = "System Notifications"
-        val description = "This is a System Notifications"
-
-        val notification =
-            Foundation.invoke(Foundation.getObjcClass("NSUserNotification"), "new", *arrayOfNulls<Any>(0))
-        Foundation.invoke(
-            notification,
-            "setTitle:",
-            *arrayOf<Any>(Foundation.nsString(StringUtil.stripHtml(title, true).replace("%", "%%")))
-        )
-        Foundation.invoke(
-            notification,
-            "setInformativeText:",
-            *arrayOf<Any>(Foundation.nsString(StringUtil.stripHtml(description, true).replace("%", "%%")))
-        )
-        // Ensure each notification is treated as unique so macOS always presents it
-        Foundation.invoke(
-            notification,
-            "setIdentifier:",
-            *arrayOf<Any>(Foundation.nsString(UUID.randomUUID().toString()))
-        )
-        // Add default sound to draw user's attention
-        Foundation.invoke(
-            notification,
-            "setSoundName:",
-            *arrayOf<Any>(Foundation.nsString("NSUserNotificationDefaultSoundName"))
-        )
-
-        Foundation.allocateObjcClassPair()
-
-        val center = Foundation.invoke(
-            Foundation.getObjcClass("NSUserNotificationCenter"),
-            "defaultUserNotificationCenter",
-            *arrayOfNulls<Any>(0)
-        )
-        Foundation.invoke(center, "deliverNotification:", *arrayOf<Any>(notification))
-
-        //IntelliJJNANotificationManager.notify(project, title, description, soundName = "Glass")
+        // Schedule the license validation 5 minutes after startup to ensure LicensingFacade is initialized
+        AppExecutorUtil.getAppScheduledExecutorService().schedule({
+            val licensed = CheckLicense.isLicensed() ?: false
+            /*
+             Why check !project.isDisposed here?
+             - The check is delayed by 5 minutes. In that window the user may close the project or the IDE may dispose it.
+             - Showing a registration dialog for a disposed project can cause exceptions, UI glitches, or show it on the Welcome Screen
+               after the project is gone (bad UX).
+             - Guarding with !project.isDisposed ensures we only request the license dialog for a live project context and skip otherwise.
+            */
+            if (!licensed && !project.isDisposed) {
+                CheckLicense.requestLicense("Support Plugin")
+            }
+        }, 5, TimeUnit.MINUTES)
     }
 }

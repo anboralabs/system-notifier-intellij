@@ -3,19 +3,45 @@
     <id>co.anbora.labs.system.notifier</id>
     <name>System Notifier</name>
     <vendor email="support@anbora.co" url="https://labs.anbora.co">Anbora-labs</vendor>
+    <!-- TODO reminder: update the release-date and pluginVersion on new release, but change the release-version on new year only -->
+    <product-descriptor code="PSYSTEMNOTIFIER" release-date="20250905" release-version="10"/>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <resource-bundle>messages.systemNotifier</resource-bundle>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.LicenseStartup"/>
+        <postStartupActivity implementation="co.anbora.labs.system.notifier.ide.startup.RunConfigurationStartup"/>
+        <externalSystemTaskNotificationListener implementation="co.anbora.labs.system.notifier.ide.listeners.externalSystem.ExternalSystemFinishedListener"/>
+
+        <projectConfigurable
+                groupId="tools"
+                key="co.anbora.labs.system.notifier.notification.settings"
+                id="co.anbora.labs.system.notifier.ide.settings.NotificationsConfigurable"
+                instance="co.anbora.labs.system.notifier.ide.settings.NotificationsConfigurable" />
+
+        <applicationService serviceImplementation="co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService"/>
+
+        <!-- Notification group used by fallback IDE notifications -->
+        <notificationGroup key="co.anbora.labs.system.notifier.notification.key" id="5f86eafc-1166-4714-b0d7-8045430751f1_systemNotifier" displayType="BALLOON" isLogByDefault="true"/>
+
+        <errorHandler implementation="co.anbora.labs.system.notifier.ide.errorHandler.SentryErrorHandler"/>
     </extensions>
+
+    <applicationListeners>
+        <listener class="co.anbora.labs.system.notifier.ide.listeners.notifications.NotificationsListener"
+                  topic="com.intellij.notification.Notifications"/>
+        <listener class="co.anbora.labs.system.notifier.ide.startup.LicenseAppLifecycleListener"
+                  topic="com.intellij.ide.AppLifecycleListener"/>
+    </applicationListeners>
 
     <extensions defaultExtensionNs="co.anbora.labs.system.notifier">
         <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.LinuxNotificationCenterNotifier"/>
+        <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.LinuxIdeFallbackNotifier"/>
         <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.MacCenterMessageNotifier"/>
         <systemNotifier implementation="co.anbora.labs.system.notifier.impl.flavor.WindowActionCenterNotifier"/>
     </extensions>

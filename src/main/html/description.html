@@ -1,11 +1,28 @@
-Provides support for the <a href="https://www.serverless.com/framework/docs/providers/aws/guide/serverless.yml">Serverless.yml files</a> syntax.<br>
-
+Add native system notifications to the IDE<br>
 <br>
-Features:<br>
+What does this plugin do?<br>
+<p>
+It turns important IDE events into native operating system notifications. This way, you can follow the status of your tasks without keeping the IDE in the foreground.
+</p>
+<br>
+Key features:<br>
 <ul>
-    <li>Syntax highlighting</li>
-    <li>AWS Provider Code completion</li>
-    <li>Code formatting</li>
-    <li>ctrl + click - Go to navigation</li>
-    <li>Structure view</li>
+    <li>Shows external system tasks (Gradle, Maven, ...) as system notifications when they finish.</li>
+    <li>Notifies when Run/Debug configurations start and finish.</li>
+    <li>Optional: mirror all IDE notifications as system notifications.</li>
+    <li>Option to add sound to notifications.</li>
+    <li>OS compatibility:
+        <ul>
+            <li>Windows: Action Center (tray).</li>
+            <li>macOS: Notification Center.</li>
+            <li>Linux: libnotify; with an in-IDE fallback when there is no D-Bus session.</li>
+        </ul>
+    </li>
+    <li>Easy configuration under Settings/Preferences → Tools → System Notifier.</li>
+</ul>
+<br>
+Notes
+<ul>
+    <li>It does not collect or send personal data.</li>
+    <li>On Linux a D-Bus session is required for native notifications; otherwise, an in-IDE balloon is used.</li>
 </ul>
