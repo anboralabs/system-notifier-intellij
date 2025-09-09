@@ -14,6 +14,6 @@ class ExternalSystemFinishedListener: ExternalSystemTaskNotificationListener {
         if (!notifierSettings.showExternalSystemAsSystemNotifications()) {
             return
         }
-        ListenersManager.notify("System Notifier Plugin", "System Notifier Plugin", "Task finished: $projectPath")
+        ListenersManager.notify("System Notifier Plugin", "External System: ${id.projectSystemId.readableName}", "Task finished: $projectPath")
     }
 }

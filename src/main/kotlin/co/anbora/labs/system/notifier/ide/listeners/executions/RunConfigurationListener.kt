@@ -17,7 +17,7 @@ class RunConfigurationListener(private val project: Project): ExecutionListener 
         if (!notifierSettings.addRunConfigurationsSystemNotifications()) {
             return
         }
-        ListenersManager.notify("System Notifier Plugin", "System Notifier Plugin", "Task started: ${env.runProfile.name}")
+        ListenersManager.notify("System Notifier Plugin", env.runProfile.name, "Task started")
     }
 
     override fun processTerminated(
@@ -29,6 +29,6 @@ class RunConfigurationListener(private val project: Project): ExecutionListener 
         if (!notifierSettings.addRunConfigurationsSystemNotifications()) {
             return
         }
-        ListenersManager.notify("System Notifier Plugin", "System Notifier Plugin", "Task finished: ${env.runProfile.name}")
+        ListenersManager.notify("System Notifier Plugin", env.runProfile.name, "Task finished")
     }
 }
