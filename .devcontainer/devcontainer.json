@@ -1,0 +1,28 @@
+{
+  "name": "System Notifier Plugin",
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb",
+    "storage": "80gb"
+  },
+  "build": {
+    "context": "..",
+    "dockerfile": "../.gitpod.Dockerfile"
+  },
+  "customizations": {
+    "jetbrains": {
+      "plugins": [
+        "DevKit",
+        "org.jetbrains.junie"
+      ]
+    }
+  },
+  "forwardPorts": [
+    6080
+  ],
+  "portsAttributes": {
+    "6080": {
+      "label": "desktop"
+    }
+  }
+}
