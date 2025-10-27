@@ -24,7 +24,7 @@ class SentryErrorHandler: ErrorReportSubmitter() {
         val context = DataManager.getInstance().getDataContext(parentComponent)
         val project: Project? = CommonDataKeys.PROJECT.getData(context)
 
-        SendIssueBackgroundTask(project, pluginDescriptor, events) {
+        SendIssueBackgroundTask(project, events) {
             ApplicationManager.getApplication().invokeLater {
                 Messages.showInfoMessage(parentComponent, "Thank you for submitting your report!", "Error Report")
                 consumer.consume(SubmittedReportInfo(SubmittedReportInfo.SubmissionStatus.NEW_ISSUE))
