@@ -1,9 +1,11 @@
 package co.anbora.labs.system.notifier.ide.errorHandler
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor
+import com.intellij.ide.plugins.PluginManager
 import com.intellij.idea.IdeaLogger
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
 import com.intellij.openapi.extensions.PluginDescriptor
+import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
@@ -14,8 +16,7 @@ import io.sentry.SentryOptions
 import java.util.function.Consumer
 
 class SendIssueBackgroundTask(
-    private val project: Project?,
-    private val pluginDescriptor: PluginDescriptor,
+    project: Project?,
     private val events: Array<out IdeaLoggingEvent>,
     private val consumer: Consumer<Unit>
 ): Task.Backgroundable(project, "Sending error Report") {
@@ -28,13 +29,13 @@ class SendIssueBackgroundTask(
         options.tracesSampleRate = 1.0
         val hub = Hub(options)
 
+        val plugin = PluginManager.getInstance().findEnabledPlugin(PluginId.getId("co.anbora.labs.system.notifier"))
+
         events.forEach {
             val event = SentryEvent()
             event.level = SentryLevel.ERROR
 
-            if (pluginDescriptor is IdeaPluginDescriptor) {
-                event.release = pluginDescriptor.version
-            }
+            event.release = plugin?.version
             // set server name to empty to avoid tracking personal data
             event.serverName = ""
 

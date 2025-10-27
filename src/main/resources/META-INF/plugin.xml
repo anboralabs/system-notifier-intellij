@@ -4,7 +4,7 @@
     <name>System Notifier</name>
     <vendor email="support@anbora.co" url="https://labs.anbora.co">Anbora-labs</vendor>
     <!-- TODO reminder: update the release-date and pluginVersion on new release, but change the release-version on new year only -->
-    <product-descriptor code="PSYSTEMNOTIFIER" release-date="20250905" release-version="10"/>
+    <product-descriptor code="PSYSTEMNOTIFIER" release-date="20251026" release-version="11"/>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
