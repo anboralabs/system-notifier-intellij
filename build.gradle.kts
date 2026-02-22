@@ -45,7 +45,7 @@ dependencies {
         pluginVerifier()
         testFramework(TestFrameworkType.Platform)
     }
-    implementation("io.sentry:sentry:6.15.0")
+    implementation("io.sentry:sentry:8.33.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.assertj:assertj-core:3.24.2")
 }
