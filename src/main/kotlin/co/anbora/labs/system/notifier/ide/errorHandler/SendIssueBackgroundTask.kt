@@ -1,6 +1,7 @@
 package co.anbora.labs.system.notifier.ide.errorHandler
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor
+import com.intellij.ide.plugins.PluginDetailsService
 import com.intellij.ide.plugins.PluginManager
 import com.intellij.idea.IdeaLogger
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
@@ -29,7 +30,7 @@ class SendIssueBackgroundTask(
         options.tracesSampleRate = 1.0
         val hub = Hub(options)
 
-        val plugin = PluginManager.getInstance().findEnabledPlugin(PluginId.getId("co.anbora.labs.system.notifier"))
+        val plugin = PluginDetailsService.getInstance().findDetails(PluginId.getId("co.anbora.labs.system.notifier"))
 
         events.forEach {
             val event = SentryEvent()
