@@ -5,7 +5,7 @@ import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Compa
 import com.intellij.ide.AppLifecycleListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationNamesInfo
-import com.intellij.ui.findAppIcon
+import com.intellij.ui.AppUIUtil
 import com.sun.jna.Library
 import com.sun.jna.Native
 import com.sun.jna.Pointer
@@ -36,7 +36,7 @@ object LinuxNotificationsImpl: SystemNotifier {
         val appName = ApplicationNamesInfo.getInstance().productName
         check(myLibNotify?.notify_init(appName) != 0) { "notify_init failed" }
 
-        val icon: String? = findAppIcon()
+        val icon: String? = AppUIUtil.findAppIcon()
         myIcon = icon ?: "dialog-information"
 
         val connection = ApplicationManager.getApplication().messageBus.connect()

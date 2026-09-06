@@ -3,7 +3,7 @@ package co.anbora.labs.system.notifier.impl
 import co.anbora.labs.system.notifier.SystemNotifier
 import co.anbora.labs.system.notifier.ide.settings.NotifierSettingsService.Companion.notifierSettings
 import com.intellij.openapi.wm.IdeFocusManager
-import com.intellij.ui.loadSmallApplicationIcon
+import com.intellij.ui.AppUIUtil
 import com.intellij.ui.scale.ScaleContext
 import com.intellij.util.IconUtil.toImage
 import com.intellij.util.ui.ImageUtil
@@ -36,7 +36,7 @@ object WindowNotificationsImpl: SystemNotifier {
     }
 
     private fun createImage(): Image {
-        val icon: Icon = loadSmallApplicationIcon(ScaleContext.create(), 16)
+        val icon: Icon = AppUIUtil.loadSmallApplicationIcon(ScaleContext.create(), 16)
         return ImageUtil.toBufferedImage(toImage(icon))
     }
 
